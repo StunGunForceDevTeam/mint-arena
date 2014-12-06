@@ -49,7 +49,7 @@ Suite 120, Rockville, Maryland 20850 USA.
 
 #define	DEFAULT_GRAVITY		800
 #define	GIB_HEALTH			-40
-#define	ARMOR_PROTECTION	0.66
+#define	ARMOR_PROTECTION	1.00
 
 #define	MAX_LOCATIONS		64
 
@@ -164,7 +164,7 @@ typedef enum {
 extern const char *bg_netGametypeNames[GT_MAX_GAME_TYPE];
 extern const char *bg_displayGametypeNames[GT_MAX_GAME_TYPE];
 
-typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
+typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_OTHER, GENDER_NEUTER } gender_t;
 
 typedef enum {
 	TR_STATIONARY,
@@ -423,6 +423,24 @@ usercmd_t->button bits definitions
 #define	MOVE_RUN			120			// if forwardmove or rightmove are >= MOVE_RUN,
 										// then BUTTON_WALKING should be set
 
+//Additional buttons
+
+#define	BUTTON_RELOAD		(1<<0)		// reload
+#define	BUTTON_USE			(1<<1)		// use
+#define	BUTTON_SPOT			(1<<2)		// spot target
+#define	BUTTON_FLASHLIGHT	(1<<3)		// flashlight
+#define	BUTTON_ALTFIRE		(1<<4)		// alt-fire
+#define	BUTTON_FIRESELECT	(1<<5)		// fire selection
+#define	BUTTON_PLACE6		(1<<6)		// placeholder
+#define	BUTTON_PLACE7		(1<<7)		// placeholder
+#define	BUTTON_PLACE8		(1<<8)		// placeholder
+#define	BUTTON_PLACE9		(1<<9)		// placeholder
+#define	BUTTON_PLACE10		(1<<10)		// placeholder
+#define	BUTTON_PLACE11		(1<<11)		// placeholder
+#define	BUTTON_PLACE12		(1<<12)		// placeholder
+#define	BUTTON_PLACE13		(1<<13)		// placeholder
+#define	BUTTON_PLACE14		(1<<14)		// placeholder
+#define	BUTTON_PLACE15		(1<<15)		// placeholder
 
 /*
 ===================================================================================
@@ -616,28 +634,7 @@ typedef enum {
 } holdable_t;
 
 
-// NOTE: may not have more than MAX_WEAPONS
-typedef enum {
-	WP_NONE,
-
-	WP_GAUNTLET,
-	WP_MACHINEGUN,
-	WP_SHOTGUN,
-	WP_GRENADE_LAUNCHER,
-	WP_ROCKET_LAUNCHER,
-	WP_LIGHTNING,
-	WP_RAILGUN,
-	WP_PLASMAGUN,
-	WP_BFG,
-	WP_GRAPPLING_HOOK,
-#ifdef MISSIONPACK
-	WP_NAILGUN,
-	WP_PROX_LAUNCHER,
-	WP_CHAINGUN,
-#endif
-
-	WP_NUM_WEAPONS
-} weapon_t;
+#include "bg_weapons.h"
 
 
 // reward sounds (stored in ps->persistant[PERS_PLAYEREVENTS])

@@ -158,7 +158,11 @@ static void CG_Obituary( entityState_t *ent ) {
 	}
 
 	if (attacker == target) {
-		gender = pi->gender;
+		if( pi->botSkill ) {
+			gender = pi->gender;
+		} else {
+			gender = GENDER_NEUTER; //TODO: Come up with a way to get this info.
+		}
 		switch (mod) {
 #ifdef MISSIONPACK
 		case MOD_KAMIKAZE:
@@ -168,26 +172,26 @@ static void CG_Obituary( entityState_t *ent ) {
 		case MOD_GRENADE_SPLASH:
 			if ( gender == GENDER_FEMALE )
 				message = "tripped on her own grenade";
-			else if ( gender == GENDER_NEUTER )
-				message = "tripped on its own grenade";
-			else
+			else if ( gender == GENDER_MALE )
 				message = "tripped on his own grenade";
+			else
+				message = "tripped on their own grenade";
 			break;
 		case MOD_ROCKET_SPLASH:
 			if ( gender == GENDER_FEMALE )
 				message = "blew herself up";
-			else if ( gender == GENDER_NEUTER )
-				message = "blew itself up";
-			else
+			else if ( gender == GENDER_MALE )
 				message = "blew himself up";
+			else
+				message = "blew themself up";
 			break;
 		case MOD_PLASMA_SPLASH:
 			if ( gender == GENDER_FEMALE )
 				message = "melted herself";
-			else if ( gender == GENDER_NEUTER )
-				message = "melted itself";
-			else
+			else if ( gender == GENDER_MALE )
 				message = "melted himself";
+			else
+				message = "melted themself";
 			break;
 		case MOD_BFG_SPLASH:
 			message = "should have used a smaller gun";
@@ -196,20 +200,20 @@ static void CG_Obituary( entityState_t *ent ) {
 		case MOD_PROXIMITY_MINE:
 			if( gender == GENDER_FEMALE ) {
 				message = "found her prox mine";
-			} else if ( gender == GENDER_NEUTER ) {
-				message = "found its prox mine";
-			} else {
+			} else if ( gender == GENDER_MALE ) {
 				message = "found his prox mine";
+			} else {
+				message = "found their prox mine";
 			}
 			break;
 #endif
 		default:
 			if ( gender == GENDER_FEMALE )
 				message = "killed herself";
-			else if ( gender == GENDER_NEUTER )
-				message = "killed itself";
-			else
+			else if ( gender == GENDER_MALE )
 				message = "killed himself";
+			else
+				message = "killed themself";
 			break;
 		}
 	}
@@ -627,8 +631,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 	case EV_FALL_MEDIUM:
 		DEBUGNAME("EV_FALL_MEDIUM");
-		// use normal pain sound
-		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, "*pain100_1.wav" ) );
+		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.landSound );
 		for (i = 0; i < CG_MaxSplitView(); i++) {
 			if ( playerNum == cg.snap->pss[i].playerNum ) {
 				// smooth landing z changes
@@ -639,8 +642,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 	case EV_FALL_FAR:
 		DEBUGNAME("EV_FALL_FAR");
-		trap_S_StartSound (NULL, es->number, CHAN_AUTO, CG_CustomSound( es->number, "*fall1.wav" ) );
-		cent->pe.painTime = cg.time;	// don't play a pain sound right after this
+		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.landSound );
 		for (i = 0; i < CG_MaxSplitView(); i++) {
 			if ( playerNum == cg.snap->pss[i].playerNum ) {
 				// smooth landing z changes
